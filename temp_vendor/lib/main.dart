@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+// app colors
+const appRed = Color(0xFF8B0000);
+const appGold = Color(0xFFFFBF00);
+const appBg = Color(0xFFF8F9FA);
+
 void main() {
   runApp(const OfficeProfileApp());
 }
@@ -12,16 +17,14 @@ class OfficeProfileApp extends StatelessWidget {
     return MaterialApp(
       title: 'BatStateU Office Profile',
       debugShowCheckedModeBanner: false,
-      // Custom Theme following BatStateU colors (Crimson & Gold)
+      // theme settings
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color(
-          0xFFF8F9FA,
-        ), // Off-white background
-        primaryColor: const Color(0xFF8B0000), // Deep Crimson
+        scaffoldBackgroundColor: appBg,
+        primaryColor: appRed,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF8B0000),
-          primary: const Color(0xFF8B0000),
-          secondary: const Color(0xFFFFBF00), // Amber/Gold
+          seedColor: appRed,
+          primary: appRed,
+          secondary: appGold,
         ),
         useMaterial3: true,
       ),
@@ -38,16 +41,16 @@ class OfficeProfileScreen extends StatefulWidget {
 }
 
 class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
-  // Global key for form validation
+  // form key to check stuff
   final _formKey = GlobalKey<FormState>();
 
-  // Text Editing Controllers for extracting input data
+  // input grabbers
   final TextEditingController _officeNameController = TextEditingController();
   final TextEditingController _officeNumberController = TextEditingController();
   final TextEditingController _officeLocationController =
       TextEditingController();
 
-  // Dropdown states
+  // dropdown choice
   String? _selectedTransaction;
   final List<String> _transactionTypes = [
     'Document Request',
@@ -58,14 +61,14 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
 
   @override
   void dispose() {
-    // Clean up controllers when the widget is disposed
+    // clean up memory
     _officeNameController.dispose();
     _officeNumberController.dispose();
     _officeLocationController.dispose();
     super.dispose();
   }
 
-  // Resets all form fields and clear inputs
+  // clear the form out
   void _clearForm() {
     _formKey.currentState?.reset();
     _officeNameController.clear();
@@ -83,10 +86,10 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
     );
   }
 
-  // Validates the form and triggers success dialog
+  // check and submit
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // Show summary dialog if form validations pass successfully
+      // show the pop-up if all good
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -96,7 +99,7 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
             ),
             title: Row(
               children: [
-                Icon(Icons.check_circle, color: Theme.of(context).primaryColor),
+                const Icon(Icons.check_circle, color: appRed),
                 const SizedBox(width: 10),
                 const Text('Submission Summary'),
               ],
@@ -120,7 +123,7 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
             actions: [
               TextButton(
                 style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(context).primaryColor,
+                  foregroundColor: appRed,
                 ),
                 onPressed: () => Navigator.of(context).pop(),
                 child: const Text('Close'),
@@ -132,7 +135,7 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
     }
   }
 
-  // Helper widget to display clean data rows inside the summary dialog
+  // row builder for the pop-up
   Widget _buildSummaryRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -163,7 +166,7 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: appRed,
         elevation: 4,
       ),
       body: SingleChildScrollView(
@@ -173,8 +176,8 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Card(
-                elevation: 3,
-                shadowColor: Colors.black12,
+                elevation: 8,
+                shadowColor: Colors.black26,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -189,7 +192,7 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF8B0000),
+                          color: appRed,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -207,23 +210,20 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
     );
   }
 
-  // PART II & IV: HEADER SECTION & GESTURE FEATURES
+  // top part and tap actions
   Widget _buildHeader() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
       decoration: const BoxDecoration(
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(color: Colors.black, blurRadius: 6, offset: Offset(0, 3)),
-        ],
       ),
       child: Column(
         children: [
-          // Wrap image with GestureDetector for Tap and Long Press Requirements
+          // handle image taps
           GestureDetector(
             onTap: () {
-              // Feature 1: Brief welcoming motto via SnackBar on Tap
+              // show motto on tap
               ScaffoldMessenger.of(context).clearSnackBars();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -231,13 +231,13 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
                     'Welcome to BatStateU Office Portal! Leading Innovations, Transforming Lives.',
                     textAlign: TextAlign.center,
                   ),
-                  backgroundColor: Color(0xFF8B0000),
+                  backgroundColor: appRed,
                   duration: Duration(seconds: 3),
                 ),
               );
             },
             onLongPress: () {
-              // Feature 2: Display Developer Info inside a Modal Bottom Sheet on Long Press
+              // show dev info when held
               showModalBottomSheet(
                 context: context,
                 shape: const RoundedRectangleBorder(
@@ -250,20 +250,20 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
+                        const Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.account_circle,
                               size: 32,
-                              color: Color(0xFFFFBF00),
+                              color: appGold,
                             ),
-                            const SizedBox(width: 12),
+                            SizedBox(width: 12),
                             Text(
                               'Developer Information',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
+                                color: appRed,
                               ),
                             ),
                           ],
@@ -295,7 +295,7 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
             child: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: const Color(0xFFFFBF00), width: 3),
+                border: Border.all(color: appGold, width: 3),
                 boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
@@ -307,7 +307,7 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
               child: const CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.white,
-                // Using a reliable sample university icon logo placeholder
+                // random stock image
                 backgroundImage: NetworkImage(
                   'https://images.unsplash.com/photo-1592280771190-3e2e4d571952?q=80&w=200&auto=format&fit=crop',
                 ),
@@ -336,13 +336,13 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
     );
   }
 
-  // PART II: FORM FIELDS WITH VALIDATION
+  // the form inputs
   Widget _buildForm() {
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          // Office Name Field
+          // office name
           TextFormField(
             controller: _officeNameController,
             decoration: InputDecoration(
@@ -361,7 +361,7 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Office Number Field
+          // office number
           TextFormField(
             controller: _officeNumberController,
             keyboardType: TextInputType.number,
@@ -384,7 +384,7 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Office Location Field
+          // location field
           TextFormField(
             controller: _officeLocationController,
             decoration: InputDecoration(
@@ -403,7 +403,7 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Transaction Type Dropdown
+          // transaction picker
           DropdownButtonFormField<String>(
             initialValue: _selectedTransaction,
             hint: const Text('Select Transaction Type'),
@@ -433,17 +433,17 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
     );
   }
 
-  // PART II: ACTION BUTTONS ROW
+  // the buttons at the bottom
   Widget _buildActionButtons() {
     return Row(
       children: [
-        // Clear Button (Outlined variant)
+        // clear stuff out
         Expanded(
           child: OutlinedButton(
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 14),
-              side: BorderSide(
-                color: Theme.of(context).primaryColor,
+              side: const BorderSide(
+                color: appRed,
                 width: 1.5,
               ),
               shape: RoundedRectangleBorder(
@@ -451,23 +451,23 @@ class _OfficeProfileScreenState extends State<OfficeProfileScreen> {
               ),
             ),
             onPressed: _clearForm,
-            child: Text(
+            child: const Text(
               'Clear',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
+                color: appRed,
               ),
             ),
           ),
         ),
         const SizedBox(width: 16),
-        // Submit Button (Crimson solid background variant)
+        // send it
         Expanded(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 14),
-              backgroundColor: Theme.of(context).primaryColor,
+              backgroundColor: appRed,
               foregroundColor: Colors.white,
               elevation: 2,
               shape: RoundedRectangleBorder(
